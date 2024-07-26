@@ -145,7 +145,7 @@ const Todo: React.FC = () => {
             <span
               style={{ cursor: "pointer" }}
               onClick={() => toggleTodo(todo.id)}
-              className="material-symbols-outlined hover:scale-110 transition-transform duration-200"
+              className="material-symbols-outlined hover:scale-125 transition-transform duration-200"
             >
               check
             </span>
@@ -178,7 +178,7 @@ const Todo: React.FC = () => {
             <span
               style={{ cursor: "pointer" }}
               onClick={() => toggleTodo(todo.id)}
-              className="material-symbols-outlined hover:scale-110 transition-transform duration-200"
+              className="material-symbols-outlined hover:scale-125 transition-transform duration-200"
             >
               undo
             </span>
