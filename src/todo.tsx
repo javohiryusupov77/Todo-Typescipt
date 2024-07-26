@@ -43,34 +43,33 @@ const Todo: React.FC = () => {
     setNewTodo("");
   };
 
- const toggleTodo = (id: number) => {
-  setTodos(
-    todos.map((todo) =>
-      todo.id === id ? { ...todo, done: !todo.done } : todo
-    )
-  );
+  const toggleTodo = (id: number) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo
+      )
+    );
 
-  const isTodoDone = todos.find((todo) => todo.id === id)?.done;
-  const message = isTodoDone ? "undone" : "done";
+    const isTodoDone = todos.find((todo) => todo.id === id)?.done;
+    const message = isTodoDone ? "undone" : "done";
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
 
-  Toast.fire({
-    icon: "success",
-    title: message,
-  });
-};
-
+    Toast.fire({
+      icon: "success",
+      title: message,
+    });
+  };
 
   const deleteTodo = (id: number) => {
     setTodos(todos.filter((todo) => todo.id !== id));
@@ -114,7 +113,7 @@ const Todo: React.FC = () => {
         />
         <span
           style={{
-            cursor:"pointer",
+            cursor: "pointer",
             paddingTop: "8px",
             background: "#9E78CF",
             borderRadius: "10px",
@@ -122,7 +121,7 @@ const Todo: React.FC = () => {
             color: "white",
           }}
           onClick={addTodo}
-          className="material-symbols-outlined"
+          className="material-symbols-outlined hover:scale-110 transition-transform duration-200"
         >
           add
         </span>
@@ -144,16 +143,16 @@ const Todo: React.FC = () => {
           >
             <span className="flex-grow">{todo.text}</span>
             <span
-              style={{ cursor: "pointer"}}
+              style={{ cursor: "pointer" }}
               onClick={() => toggleTodo(todo.id)}
-              className="material-symbols-outlined"
+              className="material-symbols-outlined hover:scale-110 transition-transform duration-200"
             >
               check
             </span>
             <span
               style={{ cursor: "pointer" }}
               onClick={() => deleteTodo(todo.id)}
-              className="material-symbols-outlined"
+              className="material-symbols-outlined hover:scale-110 transition-transform duration-200"
             >
               delete
             </span>
@@ -179,14 +178,14 @@ const Todo: React.FC = () => {
             <span
               style={{ cursor: "pointer" }}
               onClick={() => toggleTodo(todo.id)}
-              className="material-symbols-outlined"
+              className="material-symbols-outlined hover:scale-110 transition-transform duration-200"
             >
               undo
             </span>
             <span
               style={{ cursor: "pointer" }}
               onClick={() => deleteTodo(todo.id)}
-              className="material-symbols-outlined"
+              className="material-symbols-outlined hover:scale-110 transition-transform duration-200"
             >
               delete
             </span>
