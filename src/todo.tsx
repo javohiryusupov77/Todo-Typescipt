@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import Swal from "sweetalert2";
 
 interface TodoItem {
@@ -7,84 +7,86 @@ interface TodoItem {
   done: boolean;
 }
 
+const initialState: TodoItem[] = [
+  { id: 1, text: "To study React fundamentals", done: false },
+  { id: 2, text: "To study React fundamentals", done: false },
+  { id: 3, text: "To study React fundamentals", done: false },
+  { id: 4, text: "To study React fundamentals", done: false },
+  { id: 5, text: "To study React fundamentals", done: true },
+];
+
+type ActionType =
+  | { type: "ADD_TODO"; payload: string }
+  | { type: "CHECK_TODO"; payload: number }
+  | { type: "DELETE_TODO"; payload: number };
+
+const reducer = (state: TodoItem[], action: ActionType): TodoItem[] => {
+  switch (action.type) {
+    case "ADD_TODO":
+      const newTodo: TodoItem = {
+        id: state.length ? state[state.length - 1].id + 1 : 1,
+        text: action.payload,
+        done: false,
+      };
+      return [...state, newTodo];
+    case "CHECK_TODO":
+      return state.map((todo) =>
+        todo.id === action.payload ? { ...todo, done: !todo.done } : todo
+      );
+    case "DELETE_TODO":
+      return state.filter((todo) => todo.id !== action.payload);
+    default:
+      return state;
+  }
+};
+
 const Todo: React.FC = () => {
-  const [todos, setTodos] = useState<TodoItem[]>([
-    { id: 1, text: "To study React fundamentals", done: false },
-    { id: 2, text: "To study React fundamentals", done: false },
-    { id: 3, text: "To study React fundamentals", done: true },
-    { id: 4, text: "To study React fundamentals", done: false },
-    { id: 5, text: "To study React fundamentals", done: false },
-  ]);
+  const [todos, dispatch] = useReducer(reducer, initialState);
   const [newTodo, setNewTodo] = useState<string>("");
 
   const addTodo = () => {
     if (newTodo.trim() === "") return;
-    const newTodoItem: TodoItem = {
-      id: todos.length ? todos[todos.length - 1].id + 1 : 1,
-      text: newTodo,
-      done: false,
-    };
-    const Toast = Swal.mixin({
+    dispatch({ type: "ADD_TODO", payload: newTodo });
+
+    Swal.fire({
       toast: true,
       position: "top-end",
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-    Toast.fire({
       icon: "success",
       title: "Task added",
     });
-    setTodos([...todos, newTodoItem]);
+
     setNewTodo("");
   };
 
   const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
-      )
-    );
+    dispatch({ type: "CHECK_TODO", payload: id });
 
     const isTodoDone = todos.find((todo) => todo.id === id)?.done;
     const message = isTodoDone ? "undone" : "done";
 
-    const Toast = Swal.mixin({
+    Swal.fire({
       toast: true,
       position: "top-end",
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-
-    Toast.fire({
       icon: "success",
       title: message,
     });
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-    const Toast = Swal.mixin({
+    dispatch({ type: "DELETE_TODO", payload: id });
+
+    Swal.fire({
       toast: true,
       position: "top-end",
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-    Toast.fire({
       icon: "error",
       title: "Deleted",
     });
